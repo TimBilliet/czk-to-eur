@@ -25,8 +25,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "mainactiv";
-    private HomeFragment homeFragment;
     private SettingsFragment settingsFragment;
     public double rate = 1;
     private SharedPreferences sharedPref;
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         setSupportActionBar(findViewById(R.id.main_toolbar));
-        homeFragment = new HomeFragment();
+        HomeFragment homeFragment = new HomeFragment();
         settingsFragment = new SettingsFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, homeFragment).addToBackStack("home").commit();
@@ -73,13 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(!isHomefrag){//(getcurrentFragmentClass() instanceof HomeFragment)
+        if(!isHomefrag){
             MenuItem item = menu.findItem(R.id.api_fetch_rate);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.action_settings);
             item2.setVisible(false);
-        } else {
-            System.out.println("kaka");
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -116,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
                                 if(getcurrentFragmentClass() instanceof HomeFragment){
                                     HomeFragment homeFragment = (HomeFragment) fragment;
                                     homeFragment.updateRateText(rate, true);
-                                } else {
-                                    System.out.println("jammer");
                                 }
                             }
                         }

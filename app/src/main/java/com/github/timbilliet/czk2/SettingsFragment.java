@@ -1,10 +1,7 @@
 package com.github.timbilliet.czk2;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -16,7 +13,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
 //        setPreferencesFromResource(R.xml.root_preferences, rootKey);
         mainActivity = (MainActivity) requireActivity();
         mainActivity.isHomefrag = false;
