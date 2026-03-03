@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="feature_names">
+        <item>API rate</item>
+        <item>Own rate</item>
+    </string-array>
+
+    <string-array name="feature_values">
+        <item>api_rate</item>
+        <item>own_rate</item>
+    </string-array>
+</resources>
