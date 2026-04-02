@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                                         .findFragmentById(R.id.fragmentLayout);
                                 if(getcurrentFragmentClass() instanceof HomeFragment){
                                     HomeFragment homeFragment = (HomeFragment) fragment;
-                                    homeFragment.updateRateText(rate, true);
+                                    homeFragment.updateRate(rate, true);
                                 }
                             }
                         }

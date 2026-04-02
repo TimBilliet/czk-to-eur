@@ -6,19 +6,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +25,6 @@ public class HomeFragment extends Fragment {
     private EditText inputText;
     private TextView outputText;
     private EditText currentRateAmount;
-    private TextWatcher watcher;
 
     private MainActivity mainActivity;
     private double rate;
@@ -89,7 +84,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        watcher = new TextWatcher() {
+        currentRateAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -109,19 +104,35 @@ public class HomeFragment extends Fragment {
                 } catch (NumberFormatException e) {
                 }
             }
-        };
-        currentRateAmount.addTextChangedListener(watcher);
+        });
+        currentRateAmount.setOnEditorActionListener((v, actionId, event) -> {
+            updateRate(rate, false);
+
+            return false;
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            boolean keyboardVisible =
+                    insets.isVisible(WindowInsetsCompat.Type.ime());
+            View focusedView = requireActivity().getCurrentFocus();
+
+            if (!keyboardVisible && focusedView != null && focusedView.getId() == currentRateAmount.getId()) {
+                updateRate(rate, false);
+            }
+            return insets;
+        });
+
         super.onViewCreated(view, savedInstanceState);
     }
 
     @SuppressLint("DefaultLocale")
-    public void updateRateText(double rate, boolean notif) {
-        currentRateAmount.setText(String.valueOf(rate));
-        outputText.setText(String.format("%.3f", czkInput / rate));
+    public void updateRate(double rate, boolean fromApi) {
+        if (fromApi) {
+            currentRateAmount.setText(String.valueOf(rate));
+            outputText.setText(String.format("%.3f", czkInput / rate));
+            Toast.makeText(mainActivity, "Conversion rate updated.", Toast.LENGTH_SHORT).show();
+        }
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("rate_amount", String.valueOf(rate));
         editor.apply();
-        if (notif)
-            Toast.makeText(mainActivity, "Conversion rate updated.", Toast.LENGTH_SHORT).show();
     }
 }
